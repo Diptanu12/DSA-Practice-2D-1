@@ -1,0 +1,102 @@
+Find The Way
+You are given a binary matrix of dimensions m*n. A mouse enters the matrix at cell (0,0) in left to right direction.
+
+He goes in the same direction if he encounters a 0 and he takes a right turn when he encounters a 1, and changes that specific 1 to 0. Otherwise he may get stuck in a cycle!
+
+You have to find the co-ordinates from where this mouse will exit the matrix.
+
+Input Format
+First line contains the values m and n.
+
+Next m lines contain n spaced integers.
+
+Output Format
+Return the co-ordinates from where this mouse will exit the matrix separated by space.
+
+Example 1
+Input
+
+1 2
+0 0
+Output
+
+0 1
+Explanation
+
+The mouse will enter at (0,0) and keep going ahead and come out of (0,1).
+
+Example 2
+Input
+
+3 3
+0 1 0
+0 1 0
+1 0 1
+Output
+
+1 0
+Explanation
+
+We enter the matrix at (0,0) we move to (0,1) and encounter a 1 so we change it to 0 and move right to (1,1), we again encounter 1 and turn right.
+
+Then we leave the matrix from (1,0). Thus the output is 1 0.
+
+Constraints
+1 <= m,n <= 100
+
+matrix[i][j] is 0, 1
+
+Topics
+2D-Arrays
+
+
+import java.util.*;
+
+public class Main {
+    public static int[] findTheWay(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[] direction = {0, 1}; // Represents right direction initially
+        int[] position = {0, 0}; // Initial position
+
+        while (true) {
+            // Check if current position is outside the matrix
+            if (position[0] < 0 || position[0] >= m || position[1] < 0 || position[1] >= n) {
+                break;
+            }
+
+            // Check if current position is 0 or 1
+            if (matrix[position[0]][position[1]] == 0) {
+                // If 0, move in the same direction
+                position[0] += direction[0];
+                position[1] += direction[1];
+            } else {
+                // If 1, change direction (turn right) and change the cell to 0
+                int temp = direction[0];
+                direction[0] = direction[1];
+                direction[1] = -temp;
+                matrix[position[0]][position[1]] = 0;
+            }
+        }
+
+        return position;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int m, n;
+        m = sc.nextInt();
+        n = sc.nextInt();
+        int[][] matrix = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++)
+                matrix[i][j] = sc.nextInt();
+        }
+        int[] result = findTheWay(matrix);
+        for (int i = 0; i < result.length; i++) {
+            System.out.print(result[i] + " ");
+        }
+        System.out.println();
+        sc.close();
+    }
+}
